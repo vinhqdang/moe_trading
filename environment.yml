@@ -1,0 +1,14 @@
+name: moe_trading
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - numpy
+  - pandas
+  - matplotlib
+  - pip:
+    - openai>=1.0.0
+    - google-generativeai>=0.3.0
+    - yfinance

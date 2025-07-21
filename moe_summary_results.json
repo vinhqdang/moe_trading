@@ -1,0 +1,16 @@
+{
+  "round_performances": [
+    0.005869367714603335,
+    0.008789080454578935
+  ],
+  "average_performance": 0.007329224084591135,
+  "best_performance": 0.008789080454578935,
+  "best_round": 2,
+  "run_timestamp": "2025-07-21 16:39:31",
+  "config": {
+    "n_rounds": 2,
+    "k_meeting_rounds": 2,
+    "test_duration_days": 10,
+    "training_duration_days": 30
+  }
+}
