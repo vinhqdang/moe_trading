@@ -10,6 +10,7 @@ import argparse
 # Import our modules
 from expert import Expert
 from strategies import TrendFollowingExpert, MeanReversionExpert, VolatilityExpert, SentimentExpert
+from new_strategies import GeopoliticalExpert, MacroeconomicExpert
 from meeting import ExpertMeeting
 from backtester import Backtester
 
@@ -30,7 +31,7 @@ def load_config():
         return {}
 
 def run_moe_system(n_rounds: int = 3, k_meeting_rounds: int = 3, 
-                   test_duration_days: int = 30, training_duration_days: int = 180):
+                   test_duration_days: int = 30, training_duration_days: int = 180, num_experts: int = 4, scenario: str = "neutral"):
     """
     Run the Mixture of Experts system with multiple learning rounds.
     
@@ -46,12 +47,26 @@ def run_moe_system(n_rounds: int = 3, k_meeting_rounds: int = 3,
     config = load_config()
     
     # Create experts
-    experts = [
+    core_experts = [
         TrendFollowingExpert("Trend Expert"),
         MeanReversionExpert("Mean Reversion Expert"),
         VolatilityExpert("Volatility Expert"),
         SentimentExpert("Sentiment Expert")
     ]
+    
+    additional_experts = [
+        GeopoliticalExpert("Geopolitical Analyst"),
+        MacroeconomicExpert("Macroeconomic Analyst")
+    ]
+
+    experts = core_experts
+    if num_experts > 4:
+        experts.extend(additional_experts[:num_experts-4])
+
+    # Set scenario for relevant experts
+    for expert in experts:
+        if hasattr(expert, 'set_scenario'):
+            expert.set_scenario(scenario)
     
     # Create meeting facilitator
     meeting = ExpertMeeting(experts, max_rounds=k_meeting_rounds, 
@@ -194,6 +209,8 @@ if __name__ == "__main__":
     parser.add_argument("--meeting-rounds", type=int, default=3, help="Max rounds per meeting")
     parser.add_argument("--test-days", type=int, default=10, help="Days for testing")
     parser.add_argument("--train-days", type=int, default=30, help="Days for training")
+    parser.add_argument("--num-experts", type=int, default=6, help="Number of experts to use in the simulation")
+    parser.add_argument("--scenario", type=str, default="neutral", help="Geopolitical and macroeconomic scenario")
     
     args = parser.parse_args()
     
@@ -201,5 +218,7 @@ if __name__ == "__main__":
         n_rounds=args.rounds,
         k_meeting_rounds=args.meeting_rounds,
         test_duration_days=args.test_days,
-        training_duration_days=args.train_days
+        training_duration_days=args.train_days,
+        num_experts=args.num_experts,
+        scenario=args.scenario
     )
