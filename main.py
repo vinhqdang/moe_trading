@@ -31,7 +31,7 @@ def load_config():
         return {}
 
 def run_moe_system(n_rounds: int = 3, k_meeting_rounds: int = 3, 
-                   test_duration_days: int = 30, training_duration_days: int = 180, num_experts: int = 4, scenario: str = "neutral"):
+                   test_duration_days: int = 30, training_duration_days: int = 180, num_experts: int = 4, scenario: str = "neutral", expert_type: str = None, leader: str = None):
     """
     Run the Mixture of Experts system with multiple learning rounds.
     
@@ -47,21 +47,36 @@ def run_moe_system(n_rounds: int = 3, k_meeting_rounds: int = 3,
     config = load_config()
     
     # Create experts
-    core_experts = [
-        TrendFollowingExpert("Trend Expert"),
-        MeanReversionExpert("Mean Reversion Expert"),
-        VolatilityExpert("Volatility Expert"),
-        SentimentExpert("Sentiment Expert")
-    ]
-    
-    additional_experts = [
-        GeopoliticalExpert("Geopolitical Analyst"),
-        MacroeconomicExpert("Macroeconomic Analyst")
-    ]
+    if expert_type:
+        expert_class = {
+            "TrendFollowingExpert": TrendFollowingExpert,
+            "MeanReversionExpert": MeanReversionExpert,
+            "VolatilityExpert": VolatilityExpert,
+            "SentimentExpert": SentimentExpert,
+            "GeopoliticalExpert": GeopoliticalExpert,
+            "MacroeconomicExpert": MacroeconomicExpert
+        }.get(expert_type)
 
-    experts = core_experts
-    if num_experts > 4:
-        experts.extend(additional_experts[:num_experts-4])
+        if not expert_class:
+            raise ValueError(f"Unknown expert type: {expert_type}")
+
+        experts = [expert_class(f"{expert_type} {i+1}") for i in range(num_experts)]
+    else:
+        core_experts = [
+            TrendFollowingExpert("Trend Expert"),
+            MeanReversionExpert("Mean Reversion Expert"),
+            VolatilityExpert("Volatility Expert"),
+            SentimentExpert("Sentiment Expert")
+        ]
+        
+        additional_experts = [
+            GeopoliticalExpert("Geopolitical Analyst"),
+            MacroeconomicExpert("Macroeconomic Analyst")
+        ]
+
+        experts = core_experts
+        if num_experts > 4:
+            experts.extend(additional_experts[:num_experts-4])
 
     # Set scenario for relevant experts
     for expert in experts:
@@ -71,7 +86,8 @@ def run_moe_system(n_rounds: int = 3, k_meeting_rounds: int = 3,
     # Create meeting facilitator
     meeting = ExpertMeeting(experts, max_rounds=k_meeting_rounds, 
                            openai_key=config.get('openai_api_key'),
-                           gemini_key=config.get('gemini_api_key'))
+                           gemini_key=config.get('gemini_api_key'),
+                           leader=leader)
     
     # Create backtester
     backtester = Backtester()
@@ -211,6 +227,8 @@ if __name__ == "__main__":
     parser.add_argument("--train-days", type=int, default=30, help="Days for training")
     parser.add_argument("--num-experts", type=int, default=6, help="Number of experts to use in the simulation")
     parser.add_argument("--scenario", type=str, default="neutral", help="Geopolitical and macroeconomic scenario")
+    parser.add_argument("--expert-type", type=str, default=None, help="Specify a single expert type to use for all experts")
+    parser.add_argument("--leader", type=str, default=None, help="Specify the name of the expert to act as the leader")
     
     args = parser.parse_args()
     
@@ -220,5 +238,7 @@ if __name__ == "__main__":
         test_duration_days=args.test_days,
         training_duration_days=args.train_days,
         num_experts=args.num_experts,
-        scenario=args.scenario
+        scenario=args.scenario,
+        expert_type=args.expert_type,
+        leader=args.leader
     )

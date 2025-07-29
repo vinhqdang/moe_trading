@@ -18,7 +18,7 @@ class ExpertMeeting:
     """
     Facilitates meetings between experts to reach consensus on a strategy.
     """
-    def __init__(self, experts: List[Expert], max_rounds: int = 3, openai_key: str = None, gemini_key: str = None):
+    def __init__(self, experts: List[Expert], max_rounds: int = 3, openai_key: str = None, gemini_key: str = None, leader: str = None):
         """
         Initialize the meeting with a list of experts.
         
@@ -26,11 +26,14 @@ class ExpertMeeting:
             experts: List of Expert objects
             max_rounds: Maximum number of discussion rounds
             openai_key: OpenAI API key for generating expert discussions
+            gemini_key: Google Gemini API key
+            leader: Name of the expert to act as leader
         """
         self.experts = experts
         self.max_rounds = max_rounds
         self.meeting_log = []
         self.round = 0
+        self.leader = leader
         
         # Load API keys
         self.openai_key = openai_key
@@ -195,7 +198,25 @@ class ExpertMeeting:
                 expert_info += f"Reasoning: {analysis['reason']}.\n"
             
             # Create prompt for the discussion
-            prompt = f"""
+            if self.leader:
+                prompt = f"""
+            Round {round_num} of an expert discussion about investment strategy.
+            
+            The experts are discussing what action to take (buy, sell, or hold) based on market data.
+            
+            Expert analyses:
+            {expert_info}
+
+            The leader of this meeting is {self.leader}. The other experts should give the leader's opinion more weight and be more likely to be persuaded by their arguments.
+            
+            Generate a realistic discussion between these experts where they debate their views and try to persuade others. 
+            Some should defend their positions, some should be swayed by others' arguments.
+            The discussion should include technical points about their strategies, and show how they consider others' viewpoints.
+            
+            Expert Discussion:
+            """
+            else:
+                prompt = f"""
             Round {round_num} of an expert discussion about investment strategy.
             
             The experts are discussing what action to take (buy, sell, or hold) based on market data.
@@ -364,7 +385,8 @@ class ExpertMeeting:
             action = analysis["action"]
             confidence = analysis["confidence"]
             
-            weighted_votes[action] += confidence
+            weight = 2 if name == self.leader else 1
+            weighted_votes[action] += confidence * weight
         
         # Select action with highest weighted votes
         best_action = max(weighted_votes, key=weighted_votes.get)
