@@ -1,0 +1,34 @@
+{
+  "scenario": "scenario_4",
+  "scenario_description": "2020 without pandemic, alternative positive events",
+  "period": "2020-2021",
+  "annual_performances": [
+    -0.6277485133791931,
+    0.525448346073841
+  ],
+  "annual_results": {
+    "2020": {
+      "performance": -0.6277485133791931,
+      "final_equity": 39485.124520945945,
+      "sharpe_ratio": -1.0287130858147635,
+      "max_drawdown": -0.7933468248797179,
+      "n_trades": 1
+    },
+    "2021": {
+      "performance": 0.525448346073841,
+      "final_equity": 162458.45406853344,
+      "sharpe_ratio": 3.1035420942015985,
+      "max_drawdown": -0.06948000796641574,
+      "n_trades": 0
+    }
+  },
+  "summary_stats": {
+    "average_annual_return": -0.05115008365267604,
+    "total_return": -0.43214958541076154,
+    "annual_volatility": 0.5765984297265171,
+    "sharpe_ratio": -0.08871006408556596,
+    "best_year": 0.525448346073841,
+    "worst_year": -0.6277485133791931
+  },
+  "run_timestamp": "2025-07-30 21:33:33"
+}

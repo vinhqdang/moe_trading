@@ -1,0 +1,26 @@
+{
+  "scenario": "scenario_1",
+  "scenario_description": "Alternative scenario where Ukraine is the aggressor",
+  "period": "2022-2022",
+  "annual_performances": [
+    -0.7357078827554249
+  ],
+  "annual_results": {
+    "2022": {
+      "performance": -0.7357078827554249,
+      "final_equity": 25753.733034192854,
+      "sharpe_ratio": -1.7997244529789405,
+      "max_drawdown": -0.7779570008471857,
+      "n_trades": 0
+    }
+  },
+  "summary_stats": {
+    "average_annual_return": -0.7357078827554249,
+    "total_return": -0.7357078827554249,
+    "annual_volatility": 0.0,
+    "sharpe_ratio": 0.0,
+    "best_year": -0.7357078827554249,
+    "worst_year": -0.7357078827554249
+  },
+  "run_timestamp": "2025-07-30 21:34:35"
+}
