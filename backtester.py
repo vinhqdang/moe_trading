@@ -5,6 +5,7 @@ import logging
 from datetime import datetime, timedelta
 import json
 import os
+from real_market_data import RealMarketDataProvider
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,7 @@ class Backtester:
         """
         self.initial_capital = initial_capital
         self.transaction_cost = transaction_cost
+        self.market_data_provider = RealMarketDataProvider()
         self.reset()
         
     def reset(self):
@@ -310,64 +312,21 @@ class Backtester:
             results = json.load(f)
         return results
 
-    @staticmethod
-    def get_market_data(symbol: str = 'SPY', start_date: str = None, end_date: str = None) -> pd.DataFrame:
+    def get_market_data(self, start_date: str = None, end_date: str = None) -> pd.DataFrame:
         """
-        Helper method to get market data for backtesting.
-        In a real implementation, this would connect to a data provider.
-        For this example, we'll generate some simulated data.
+        Get realistic market data based on historical patterns from 2014-2024.
         
         Args:
-            symbol: Trading symbol
             start_date: Start date string (YYYY-MM-DD)
             end_date: End date string (YYYY-MM-DD)
             
         Returns:
-            DataFrame with OHLCV data
+            DataFrame with OHLCV data based on real market patterns
         """
-        # Parse dates
+        # Use default dates if not provided
         if not end_date:
-            end_date = datetime.now().strftime('%Y-%m-%d')
+            end_date = '2024-12-31'
         if not start_date:
-            start_date = (datetime.strptime(end_date, '%Y-%m-%d') - timedelta(days=365)).strftime('%Y-%m-%d')
+            start_date = '2014-01-01'
             
-        start = pd.to_datetime(start_date)
-        end = pd.to_datetime(end_date)
-        
-        # Generate date range (only business days)
-        date_range = pd.date_range(start=start, end=end, freq='B')
-        
-        # Base price and daily volatility
-        base_price = 100.0
-        daily_vol = 0.015
-        
-        # Generate price series with random walk
-        np.random.seed(42)  # For reproducibility
-        returns = np.random.normal(0.0005, daily_vol, size=len(date_range))
-        
-        # Add some trends and patterns
-        trend_cycles = 3
-        trend = 0.1 * np.sin(np.linspace(0, trend_cycles * 2 * np.pi, len(date_range)))
-        returns = returns + trend
-        
-        # Calculate price series
-        log_returns = np.log(1 + returns)
-        log_price_series = np.cumsum(log_returns)
-        price_series = base_price * np.exp(log_price_series)
-        
-        # Create OHLCV data
-        data = pd.DataFrame(index=date_range)
-        data['date'] = data.index
-        data['close'] = price_series
-        
-        # Generate OHLC based on close prices
-        data['open'] = data['close'].shift(1) * (1 + np.random.normal(0, 0.003, size=len(data)))
-        data['high'] = data[['open', 'close']].max(axis=1) * (1 + abs(np.random.normal(0, 0.005, size=len(data))))
-        data['low'] = data[['open', 'close']].min(axis=1) * (1 - abs(np.random.normal(0, 0.005, size=len(data))))
-        data['volume'] = np.random.normal(1000000, 200000, size=len(data))
-        data['volume'] = data['volume'].clip(lower=100000)
-        
-        # Fill first row NaN values
-        data['open'].iloc[0] = price_series[0] * 0.995
-        
-        return data.reset_index(drop=True)
+        return self.market_data_provider.get_market_data(start_date, end_date)

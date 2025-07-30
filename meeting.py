@@ -50,15 +50,9 @@ class ExpertMeeting:
             except Exception as e:
                 logger.warning(f"Failed to load API keys: {e}")
                 
-        # Configure Gemini if available
-        if self.gemini_key:
-            try:
-                genai.configure(api_key=self.gemini_key)
-                self.gemini_model = genai.GenerativeModel('gemini-1.5-flash')
-                logger.info("Gemini API configured successfully")
-            except Exception as e:
-                logger.warning(f"Failed to configure Gemini API: {e}")
-                self.gemini_key = None
+        # Disable Gemini to use only OpenAI
+        self.gemini_key = None
+        logger.info("Using OpenAI GPT-3.5 only (Gemini disabled)")
     
     def hold_meeting(self, data: pd.DataFrame) -> Dict[str, Any]:
         """

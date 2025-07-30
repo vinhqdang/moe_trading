@@ -1,0 +1,115 @@
+{
+  "period": "2014-2024",
+  "annual_performances": [
+    -0.5416405902623613,
+    -0.13009814402917474,
+    -0.04927511478891844,
+    0.19879896948420428,
+    -0.7799208908523659,
+    -0.019880171314598516,
+    -0.6020330838086834,
+    0.42904261037202507,
+    -0.8037874811518335,
+    -0.02323026444043208,
+    0.23055388322480175
+  ],
+  "annual_results": {
+    "2014": {
+      "performance": -0.5416405902623613,
+      "final_equity": 48459.004376371406,
+      "sharpe_ratio": -1.9180779536112846,
+      "max_drawdown": -0.5488409801724465,
+      "n_trades": 0
+    },
+    "2015": {
+      "performance": -0.13009814402917474,
+      "final_equity": 93449.73046440622,
+      "sharpe_ratio": -0.5435887024339229,
+      "max_drawdown": -0.38990668483666824,
+      "n_trades": 0
+    },
+    "2016": {
+      "performance": -0.04927511478891844,
+      "final_equity": 100033.15116593648,
+      "sharpe_ratio": -0.21972384736036357,
+      "max_drawdown": -0.3447476021400596,
+      "n_trades": 1
+    },
+    "2017": {
+      "performance": 0.19879896948420428,
+      "final_equity": 125926.78789227214,
+      "sharpe_ratio": 1.9953599518195853,
+      "max_drawdown": -0.07614733386175021,
+      "n_trades": 0
+    },
+    "2018": {
+      "performance": -0.7799208908523659,
+      "final_equity": 23614.268686750343,
+      "sharpe_ratio": -1.9411580896353153,
+      "max_drawdown": -0.7975203047063367,
+      "n_trades": 1
+    },
+    "2019": {
+      "performance": -0.019880171314598516,
+      "final_equity": 101185.46980767309,
+      "sharpe_ratio": -0.12290043055630874,
+      "max_drawdown": -0.12124889817261886,
+      "n_trades": 0
+    },
+    "2020": {
+      "performance": -0.6020330838086834,
+      "final_equity": 41669.41278545403,
+      "sharpe_ratio": -0.9622177365408874,
+      "max_drawdown": -0.8049863009643399,
+      "n_trades": 2
+    },
+    "2021": {
+      "performance": 0.42904261037202507,
+      "final_equity": 149901.7458064358,
+      "sharpe_ratio": 2.259271238101923,
+      "max_drawdown": -0.13565712458651336,
+      "n_trades": 0
+    },
+    "2022": {
+      "performance": -0.8037874811518335,
+      "final_equity": 19664.915594579274,
+      "sharpe_ratio": -1.960322922208497,
+      "max_drawdown": -0.8122418418470085,
+      "n_trades": 1
+    },
+    "2023": {
+      "performance": -0.02323026444043208,
+      "final_equity": 102880.538292709,
+      "sharpe_ratio": -0.10564061416039316,
+      "max_drawdown": -0.26608124777701625,
+      "n_trades": 0
+    },
+    "2024": {
+      "performance": 0.23055388322480175,
+      "final_equity": 129364.74520604765,
+      "sharpe_ratio": 1.6120235894669985,
+      "max_drawdown": -0.08211765552511274,
+      "n_trades": 0
+    }
+  },
+  "summary_stats": {
+    "average_annual_return": -0.19013366159703063,
+    "total_return": -0.9868523747176198,
+    "annual_volatility": 0.4055918780718887,
+    "sharpe_ratio": -0.4687807421117309,
+    "best_year": 0.42904261037202507,
+    "worst_year": -0.8037874811518335
+  },
+  "run_timestamp": "2025-07-29 22:28:00",
+  "config": {
+    "start_year": 2014,
+    "end_year": 2024,
+    "leader": "Context-Aware Trend Expert",
+    "experts": [
+      "Context-Aware Trend Expert",
+      "Mean Reversion Expert",
+      "Context-Aware Volatility Expert",
+      "Context-Aware Sentiment Expert"
+    ]
+  }
+}
